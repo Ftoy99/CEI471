@@ -26,7 +26,7 @@ def main():
     st.header("Group 2")
     st.write("""
             - Christos Christodoulou
-            - Danny Qahtan
+            - Danny Kahtan
             - Dimitris Ioannou
             """)
 
