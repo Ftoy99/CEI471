@@ -23,6 +23,7 @@ def clean_dataset(dataset):
     for x in dataset.columns:
         if dataset[x].dtype == "float64":
             values[x] = [st.slider(x, 0, 64, 3), x]
+    #TODO from slider remove decimals
 
 
 def main():
