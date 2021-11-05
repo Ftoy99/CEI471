@@ -4,26 +4,23 @@ import numpy
 
 
 def clean_dataset(dataset):
-    # Making age an int since there are some rows that age is a float
-    # dataset['age'] = dataset['age'].astype(numpy.int64)
     st.header("Data Cleaning")
     st.write("We are going to process our data to better suit our needs.")
-
     # TODO MAKE WRITE BEAUTIFUL 1
     st.write(dataset)
-    st.write("First we are going to drop unnecessary columns we don't need.")
-    colToDrop = st.multiselect(label="Select columns to drop.", options=dataset.columns)
-    for x in colToDrop:
-        dataset.drop(x, inplace=True, axis=1)
-    # TODO MAKE WRITE BEAUTIFUL 2
+    st.write("Age and platelets are integers so we are going to cast them accordingly. We are also going to set the precision to 2 decimals.")
+    code = '''    dataset['age'] = dataset['age'].astype(numpy.int64)
+    dataset['platelets'] = dataset['platelets'].astype(numpy.int64)
+    dataset['serum_creatinine'] = dataset['serum_creatinine'].map('{:,.2f}'.format)'''
+    st.code(code, language='python')
+    dataset['age'] = dataset['age'].astype(numpy.int64)
+    dataset['platelets'] = dataset['platelets'].astype(numpy.int64)
+    dataset['serum_creatinine'] = dataset['serum_creatinine'].map('{:,.2f}'.format)
+    # Making age an int since there are some rows that age is a float
     st.write(dataset)
-    # Setting Precision for data.
-    st.write("Adjust the precision and remove all unnecessary decimal digits")
-    values = {}
-    for x in dataset.columns:
-        if dataset[x].dtype == "float64":
-            values[x] = [st.slider(x, 0, 64, 3), x]
-    #TODO from slider remove decimals
+    st.write("Our dataset looks clean enough so that it can be processed.")
+    return dataset
+
 
 
 def main():
@@ -45,7 +42,8 @@ def main():
         dataset = st.file_uploader(label="Select a dataset for the model to train on it.", type=["csv"])
     if dataset is not None:
         dataset = pd.read_csv(dataset)
-        clean_dataset(dataset)
+        dataset = clean_dataset(dataset)
+    st.header("Graphs And Statistics of Dataset")
 
 
 if __name__ == "__main__":
