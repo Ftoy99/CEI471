@@ -36,9 +36,9 @@ def data_analysis(dataset):
     st.header('Data Analysis and Statistics')
     st.write('text')
     col1, col2 = st.columns(2)
+    # SEX PLOT
     with col1:
         fig, ax = pyplot.subplots()
-        # bins ???
         N, bins, patches = ax.hist(dataset["sex"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
         pyplot.xticks((0, 1), ["Male", "Female"])
         pyplot.ylabel("People")
@@ -46,24 +46,103 @@ def data_analysis(dataset):
         pyplot.title("Genders")
         patches[0].set_facecolor('royalblue')
         patches[1].set_facecolor('crimson')
-        ax.hist(dataset.sex[dataset['DEATH_EVENT'] == 1], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7, color="darkorange")
-        #Legend
+        ax.hist(dataset.sex[dataset['DEATH_EVENT'] == 1], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7,
+                color="darkorange")
+        # Legend
         crimson_patch = mpatches.Patch(color='crimson', label='Women')
         royalblue_patch = mpatches.Patch(color='royalblue', label='Men')
         darkorange_patch = mpatches.Patch(color='darkorange', label='Death')
-        pyplot.legend(handles=[crimson_patch,royalblue_patch,darkorange_patch])
+        pyplot.legend(handles=[crimson_patch, royalblue_patch, darkorange_patch])
+
+        # Data on graph.
+        men = len(dataset[(dataset['sex'] == 0)])
+        women = len(dataset[(dataset['sex'] == 1)])
+        menDied = len(dataset[(dataset['sex'] == 0) & (dataset['DEATH_EVENT'] == 1)])
+        womenDied = len(dataset[(dataset['sex'] == 1) & (dataset['DEATH_EVENT'] == 1)])
+        pyplot.text(0, men+1, men)
+        pyplot.text(0, menDied+1, str(round((menDied / men) * 100)) + '%')
+        pyplot.text(1, women + 1, women)
+        pyplot.text(1, womenDied + 1, str(round((womenDied / women) * 100)) + '%')
+
         st.pyplot(fig)
+    # ANEMIA PLOT
     with col2:
         fig, ax = pyplot.subplots()
-        # bins ???
-        N, bins, patches = ax.hist(dataset["sex"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
-        pyplot.xticks((0, 1), ["Male", "Female"])
+        N, bins, patches = ax.hist(dataset["anaemia"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
+        pyplot.xticks((0, 1), ["No Anaemia", "Anaemia"])
         pyplot.ylabel("People")
         # ax.set_xticklabels("Male", "Female")
-        pyplot.title("Genders")
+        pyplot.title("Anaemia")
         patches[0].set_facecolor('royalblue')
         patches[1].set_facecolor('crimson')
-        ax.hist(dataset.sex[dataset['DEATH_EVENT'] == 1], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7, color="red")
+        ax.hist(dataset.anaemia[dataset['DEATH_EVENT'] == 1], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7,
+                color="darkorange")
+
+        # Legend
+        crimson_patch = mpatches.Patch(color='crimson', label='Anaemia')
+        royalblue_patch = mpatches.Patch(color='royalblue', label='NO Anaemia')
+        darkorange_patch = mpatches.Patch(color='darkorange', label='Death')
+        pyplot.legend(handles=[crimson_patch, royalblue_patch, darkorange_patch])
+
+        noanemia = len(dataset[(dataset['anaemia'] == 0)])
+        anaemia = len(dataset[(dataset['anaemia'] == 1)])
+        noanemiaDied = len(dataset[(dataset['anaemia'] == 0) & (dataset['DEATH_EVENT'] == 1)])
+        anemiaDied = len(dataset[(dataset['anaemia'] == 1) & (dataset['DEATH_EVENT'] == 1)])
+        pyplot.text(0, noanemia+1, noanemia)
+        pyplot.text(0, noanemiaDied+1, str(round((noanemiaDied / noanemia) * 100)) + '%')
+        pyplot.text(1, anaemia + 1, anaemia)
+        pyplot.text(1, anemiaDied + 1, str(round((anemiaDied / anaemia) * 100)) + '%')
+
+        st.pyplot(fig)
+
+    col3, col4 = st.columns(2)
+    # SEX PLOT
+    with col3:
+        fig, ax = pyplot.subplots()
+        # bins ???
+        N, bins, patches = ax.hist(dataset["diabetes"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
+        pyplot.xticks((0, 1), ["No Diabetes", "Diabetes"])
+        pyplot.ylabel("People")
+        # ax.set_xticklabels("Male", "Female")
+        pyplot.title("Diabetes")
+        patches[0].set_facecolor('royalblue')
+        patches[1].set_facecolor('crimson')
+        ax.hist(dataset.diabetes[dataset['DEATH_EVENT'] == 1], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7,
+                color="darkorange")
+        # Legend
+        crimson_patch = mpatches.Patch(color='crimson', label='Diabetes')
+        royalblue_patch = mpatches.Patch(color='royalblue', label='No Diabetes')
+        darkorange_patch = mpatches.Patch(color='darkorange', label='Death')
+        pyplot.legend(handles=[crimson_patch, royalblue_patch, darkorange_patch])
+
+        nodiabetes = len(dataset[(dataset['diabetes'] == 0)])
+        diabetes = len(dataset[(dataset['diabetes'] == 1)])
+        nodiabetesDied = len(dataset[(dataset['diabetes'] == 0) & (dataset['DEATH_EVENT'] == 1)])
+        diabetesDied = len(dataset[(dataset['diabetes'] == 1) & (dataset['DEATH_EVENT'] == 1)])
+        pyplot.text(0, nodiabetes+1, nodiabetes)
+        pyplot.text(0, nodiabetesDied+1, str(round((nodiabetesDied / nodiabetes) * 100)) + '%')
+        pyplot.text(1, diabetes + 1, diabetes)
+        pyplot.text(1, diabetesDied + 1, str(round((diabetesDied / diabetes) * 100)) + '%')
+
+        st.pyplot(fig)
+    # ANEMIA PLOT
+    with col4:
+        fig, ax = pyplot.subplots()
+        N, bins, patches = ax.hist(dataset["smoking"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
+        pyplot.xticks((0, 1), ["No Smoking", "Smoking"])
+        pyplot.ylabel("People")
+        # ax.set_xticklabels("Male", "Female")
+        pyplot.title("Smoking")
+        patches[0].set_facecolor('royalblue')
+        patches[1].set_facecolor('crimson')
+        ax.hist(dataset.smoking[dataset['DEATH_EVENT'] == 1], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7,
+                color="darkorange")
+
+        # Legend
+        crimson_patch = mpatches.Patch(color='crimson', label='Smoking')
+        royalblue_patch = mpatches.Patch(color='royalblue', label='No Smoking')
+        darkorange_patch = mpatches.Patch(color='darkorange', label='Death')
+        pyplot.legend(handles=[crimson_patch, royalblue_patch, darkorange_patch])
         st.pyplot(fig)
 
 
