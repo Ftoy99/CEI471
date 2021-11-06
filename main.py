@@ -4,7 +4,6 @@ import numpy
 import matplotlib.pyplot as pyplot
 import matplotlib
 import matplotlib.colors as colors
-from matplotlib import *
 import matplotlib.patches as mpatches
 
 
@@ -92,7 +91,6 @@ def data_analysis(dataset):
         pyplot.text(0, noanemiaDied+1, str(round((noanemiaDied / noanemia) * 100)) + '%')
         pyplot.text(1, anaemia + 1, anaemia)
         pyplot.text(1, anemiaDied + 1, str(round((anemiaDied / anaemia) * 100)) + '%')
-
         st.pyplot(fig)
 
     col3, col4 = st.columns(2)
