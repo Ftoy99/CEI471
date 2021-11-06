@@ -1,6 +1,11 @@
 import streamlit as st
 import pandas as pd
 import numpy
+import matplotlib.pyplot as pyplot
+import matplotlib
+import matplotlib.colors as colors
+from matplotlib import *
+import matplotlib.patches as mpatches
 
 
 def clean_dataset(dataset):
@@ -20,11 +25,46 @@ def clean_dataset(dataset):
     dataset['age'] = dataset['age'].astype(numpy.int64)
     dataset['platelets'] = dataset['platelets'].astype(numpy.int64)
     dataset['serum_creatinine'] = dataset['serum_creatinine'].map('{:,.2f}'.format)
-    del(dataset["time"])
+    del (dataset["time"])
     # Making age an int since there are some rows that age is a float
     st.write(dataset)
     st.write("Our dataset looks clean enough so that it can be processed.")
     return dataset
+
+
+def data_analysis(dataset):
+    st.header('Data Analysis and Statistics')
+    st.write('text')
+    col1, col2 = st.columns(2)
+    with col1:
+        fig, ax = pyplot.subplots()
+        # bins ???
+        N, bins, patches = ax.hist(dataset["sex"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
+        pyplot.xticks((0, 1), ["Male", "Female"])
+        pyplot.ylabel("People")
+        # ax.set_xticklabels("Male", "Female")
+        pyplot.title("Genders")
+        patches[0].set_facecolor('royalblue')
+        patches[1].set_facecolor('crimson')
+        ax.hist(dataset.sex[dataset['DEATH_EVENT'] == 1], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7, color="darkorange")
+        #Legend
+        crimson_patch = mpatches.Patch(color='crimson', label='Women')
+        royalblue_patch = mpatches.Patch(color='royalblue', label='Men')
+        darkorange_patch = mpatches.Patch(color='darkorange', label='Death')
+        pyplot.legend(handles=[crimson_patch,royalblue_patch,darkorange_patch])
+        st.pyplot(fig)
+    with col2:
+        fig, ax = pyplot.subplots()
+        # bins ???
+        N, bins, patches = ax.hist(dataset["sex"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
+        pyplot.xticks((0, 1), ["Male", "Female"])
+        pyplot.ylabel("People")
+        # ax.set_xticklabels("Male", "Female")
+        pyplot.title("Genders")
+        patches[0].set_facecolor('royalblue')
+        patches[1].set_facecolor('crimson')
+        ax.hist(dataset.sex[dataset['DEATH_EVENT'] == 1], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7, color="red")
+        st.pyplot(fig)
 
 
 def main():
@@ -47,7 +87,7 @@ def main():
     if dataset is not None:
         dataset = pd.read_csv(dataset)
         dataset = clean_dataset(dataset)
-    st.header("Graphs And Statistics of Dataset")
+        data_analysis(dataset)
 
 
 if __name__ == "__main__":
