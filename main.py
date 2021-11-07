@@ -59,8 +59,8 @@ def data_analysis(dataset):
         women = len(dataset[(dataset['sex'] == 1)])
         menDied = len(dataset[(dataset['sex'] == 0) & (dataset['DEATH_EVENT'] == 1)])
         womenDied = len(dataset[(dataset['sex'] == 1) & (dataset['DEATH_EVENT'] == 1)])
-        pyplot.text(0, men+1, men)
-        pyplot.text(0, menDied+1, str(round((menDied / men) * 100)) + '%')
+        pyplot.text(0, men + 1, men)
+        pyplot.text(0, menDied + 1, str(round((menDied / men) * 100)) + '%')
         pyplot.text(1, women + 1, women)
         pyplot.text(1, womenDied + 1, str(round((womenDied / women) * 100)) + '%')
 
@@ -88,8 +88,8 @@ def data_analysis(dataset):
         anaemia = len(dataset[(dataset['anaemia'] == 1)])
         noanemiaDied = len(dataset[(dataset['anaemia'] == 0) & (dataset['DEATH_EVENT'] == 1)])
         anemiaDied = len(dataset[(dataset['anaemia'] == 1) & (dataset['DEATH_EVENT'] == 1)])
-        pyplot.text(0, noanemia+1, noanemia)
-        pyplot.text(0, noanemiaDied+1, str(round((noanemiaDied / noanemia) * 100)) + '%')
+        pyplot.text(0, noanemia + 1, noanemia)
+        pyplot.text(0, noanemiaDied + 1, str(round((noanemiaDied / noanemia) * 100)) + '%')
         pyplot.text(1, anaemia + 1, anaemia)
         pyplot.text(1, anemiaDied + 1, str(round((anemiaDied / anaemia) * 100)) + '%')
 
@@ -119,8 +119,8 @@ def data_analysis(dataset):
         diabetes = len(dataset[(dataset['diabetes'] == 1)])
         nodiabetesDied = len(dataset[(dataset['diabetes'] == 0) & (dataset['DEATH_EVENT'] == 1)])
         diabetesDied = len(dataset[(dataset['diabetes'] == 1) & (dataset['DEATH_EVENT'] == 1)])
-        pyplot.text(0, nodiabetes+1, nodiabetes)
-        pyplot.text(0, nodiabetesDied+1, str(round((nodiabetesDied / nodiabetes) * 100)) + '%')
+        pyplot.text(0, nodiabetes + 1, nodiabetes)
+        pyplot.text(0, nodiabetesDied + 1, str(round((nodiabetesDied / nodiabetes) * 100)) + '%')
         pyplot.text(1, diabetes + 1, diabetes)
         pyplot.text(1, diabetesDied + 1, str(round((diabetesDied / diabetes) * 100)) + '%')
 
@@ -144,6 +144,24 @@ def data_analysis(dataset):
         darkorange_patch = mpatches.Patch(color='darkorange', label='Death')
         pyplot.legend(handles=[crimson_patch, royalblue_patch, darkorange_patch])
         st.pyplot(fig)
+
+    col5, col6 = st.columns(2)
+    with col5:
+        fig, ax = pyplot.subplots()
+        pyplot.title("Test")
+        pyplot.xlabel("age")
+        pyplot.ylabel("Platelets")
+        x = dataset.age[dataset['DEATH_EVENT'] == 0]
+        y = dataset.platelets[dataset['DEATH_EVENT'] == 0]
+        pyplot.scatter(x, y, c="darkorange")
+
+        k = dataset.age[dataset['DEATH_EVENT'] == 1]
+        l = dataset.platelets[dataset['DEATH_EVENT'] == 1]
+        pyplot.scatter(k, l, c="dimgray")
+        pyplot.legend(["Death", "No Death"])
+        st.pyplot(fig)
+
+
 
 
 def main():
