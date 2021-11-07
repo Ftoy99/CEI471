@@ -1,11 +1,12 @@
 import streamlit as st
 import pandas as pd
-import numpy
+import numpy as np
 import matplotlib.pyplot as pyplot
 import matplotlib
 import matplotlib.colors as colors
 from matplotlib import *
 import matplotlib.patches as mpatches
+import seaborn as sns
 
 
 def clean_dataset(dataset):
@@ -145,6 +146,22 @@ def data_analysis(dataset):
         pyplot.legend(handles=[crimson_patch, royalblue_patch, darkorange_patch])
         st.pyplot(fig)
 
+        rcParams['figure.figsize'] = 20, 14
+        pyplot.matshow(dataset.corr())
+        pyplot.yticks(np.arange(dataset.shape[1]), dataset.columns)
+        pyplot.xticks(np.arange(dataset.shape[1]), dataset.columns)
+        pyplot.colorbar()
+
+
+
+
+
+
+
+
+
+
+
     col5, col6 = st.columns(2)
     with col5:
         fig, ax = pyplot.subplots()
@@ -160,6 +177,20 @@ def data_analysis(dataset):
         pyplot.scatter(k, l, c="dimgray")
         pyplot.legend(["Death", "No Death"])
         st.pyplot(fig)
+
+
+        with col6:
+            corr_matrix = dataset.corr()
+            fig, ax = pyplot.subplots()
+            ax = sns.heatmap(corr_matrix,
+                            annot=True,
+                            linewidths=0.5,
+                            fmt=".2f",
+                            cmap="YlGnBu")
+
+            bottom, top = ax.get_ylim()
+            st.pyplot(fig)
+
 
 
 
@@ -185,6 +216,8 @@ def main():
         dataset = pd.read_csv(dataset)
         dataset = clean_dataset(dataset)
         data_analysis(dataset)
+
+
 
 
 if __name__ == "__main__":
