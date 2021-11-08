@@ -13,56 +13,50 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report
 from sklearn.svm import SVC
+from sklearn.neighbors import KNeighborsClassifier
 
 
 def data_machineLearning(dataset):
     # TODO MAKE THIS DYNAMIC WITH USER INPUTS AND PARAMETERS.
     st.header('Heart Attack Prediction With Machine Learning')
     st.write('description')
-
-    # Split dataset .
-    X = dataset.drop('DEATH_EVENT', axis=1)
-    Y = dataset['DEATH_EVENT']
-    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3)
-
-    # Normalize: Standardizing the data will transform the data so
-    # that its distribution will have a mean of 0 and a standard deviation of 1.
-    sc = StandardScaler()
-    X_train = sc.fit_transform(X_train)
-    X_test = sc.transform(X_test)
-
-    # Train Dataset Logistic Regression.
-    LogisticReg_Model = LogisticRegression(solver='liblinear')
-    LogisticReg_Model.fit(X_train, Y_train)
-    pred = LogisticReg_Model.predict(X_train)
-    print("Train Result LR:\n================================================")
-    print(f"Accuracy Score: {accuracy_score(Y_train, pred) * 100:.2f}%")
-    pred = LogisticReg_Model.predict(X_test)
-    print("Test Result LR:\n================================================")
-    print(f"Accuracy Score: {accuracy_score(Y_test, pred) * 100:.2f}%")
-
-    # Trai ndataset KNearest neighboors
-    from sklearn.metrics import classification_report
-    from sklearn.neighbors import KNeighborsClassifier
-
-    KnnModel = KNeighborsClassifier()  # get instance of model
-    KnnModel.fit(X_train, Y_train)  # Train/Fit model
-    pred = KnnModel.predict(X_train)
-    print("Train Result KNN:\n================================================")
-    print(f"Accuracy Score: {accuracy_score(Y_train, pred) * 100:.2f}%")
-    pred = KnnModel.predict(X_test)
-    print("Test Result KNN:\n================================================")
-    print(f"Accuracy Score: {accuracy_score(Y_test, pred) * 100:.2f}%")
-
-    #SVG Model
-    SvcModel = SVC(random_state=1)
-    SvcModel.fit(X_train, Y_train)  # Train/Fit model
-    pred = SvcModel.predict(X_train)
-    print("Train Result SVC:\n================================================")
-    print(f"Accuracy Score: {accuracy_score(Y_train, pred) * 100:.2f}%")
-    pred = SvcModel.predict(X_test)
-    print("Test Result SVC:\n================================================")
-    print(f"Accuracy Score: {accuracy_score(Y_test, pred) * 100:.2f}%")
+    # Form for Machine Learning
+    with st.form("ml_form"):
+        st.write("Machine Learning")
+        model = st.selectbox('Chose Machine Learning Algorithm', ('Logistic Regression', 'K-Nearest Neighbors', 'Support Vector Machine'))
+        normalize = st.checkbox("Normalize")
+        randomSeedSplit = st.checkbox("Random Split Seed")
+        testPercentage = st.slider('Datasize percentage for Training.', 1, 99, 20)
+        submitted = st.form_submit_button("Train")
+        if submitted:
+            # Split dataset .
+            X = dataset.drop('DEATH_EVENT', axis=1)
+            Y = dataset['DEATH_EVENT']
+            if randomSeedSplit:
+                X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=int(testPercentage) / 100)
+            else:
+                X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=int(testPercentage) / 100,
+                                                                    random_state=42)
+            if normalize:
+                # Normalize: Standardizing the data will transform the data so
+                # that its distribution will have a mean of 0 and a standard deviation of 1.
+                sc = StandardScaler()
+                X_train = sc.fit_transform(X_train)
+                X_test = sc.transform(X_test)
+            # Models go here
+            if model == 'Logistic Regression':
+                mlModel = LogisticRegression(random_state=0)
+            elif model == 'K-Nearest Neighbors':
+                mlModel = KNeighborsClassifier()
+            elif model == 'Support Vector Machine':
+                mlModel = SVC(random_state=42)
+            mlModel.fit(X_train, Y_train)
+            pred = mlModel.predict(X_train)
+            st.write("Accuracy on trained data:\n================================================")
+            st.write(f"Accuracy Score: {accuracy_score(Y_train, pred) * 100:.2f}%")
+            pred = mlModel.predict(X_test)
+            st.write("Accuracy on untrained data:\n================================================")
+            st.write(f"Accuracy Score: {accuracy_score(Y_test, pred) * 100:.2f}%")
 
 
 def clean_dataset(dataset):
