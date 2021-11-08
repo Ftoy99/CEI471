@@ -126,7 +126,7 @@ def data_analysis(dataset):
         pyplot.text(1, diabetesDied + 1, str(round((diabetesDied / diabetes) * 100)) + '%')
 
         st.pyplot(fig)
-    # ANEMIA PLOT
+    # Smoking PLOT
     with col4:
         fig, ax = pyplot.subplots()
         N, bins, patches = ax.hist(dataset["smoking"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
@@ -144,13 +144,23 @@ def data_analysis(dataset):
         royalblue_patch = mpatches.Patch(color='royalblue', label='No Smoking')
         darkorange_patch = mpatches.Patch(color='darkorange', label='Death')
         pyplot.legend(handles=[crimson_patch, royalblue_patch, darkorange_patch])
-        st.pyplot(fig)
+
+        nosmoking = len(dataset[(dataset['smoking'] == 0)])
+        smoking = len(dataset[(dataset['smoking'] == 1)])
+        nosmokingDied = len(dataset[(dataset['smoking'] == 0) & (dataset['DEATH_EVENT'] == 1)])
+        smokingDied = len(dataset[(dataset['smoking'] == 1) & (dataset['DEATH_EVENT'] == 1)])
+        pyplot.text(0, nosmoking + 1, nosmoking)
+        pyplot.text(0, nosmokingDied + 1, str(round((nosmokingDied / nosmoking) * 100)) + '%')
+        pyplot.text(1, smoking + 1, smoking)
+        pyplot.text(1, smokingDied + 1, str(round((smokingDied / smoking) * 100)) + '%')
 
         rcParams['figure.figsize'] = 20, 14
         pyplot.matshow(dataset.corr())
         pyplot.yticks(np.arange(dataset.shape[1]), dataset.columns)
         pyplot.xticks(np.arange(dataset.shape[1]), dataset.columns)
         pyplot.colorbar()
+
+        st.pyplot(fig)
 
 
 
