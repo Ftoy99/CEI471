@@ -23,7 +23,8 @@ def data_machineLearning(dataset):
     # Form for Machine Learning
     with st.form("ml_form"):
         st.write("Machine Learning")
-        model = st.selectbox('Chose Machine Learning Algorithm', ('Logistic Regression', 'K-Nearest Neighbors', 'Support Vector Machine'))
+        model = st.selectbox('Chose Machine Learning Algorithm',
+                             ('Logistic Regression', 'K-Nearest Neighbors', 'Support Vector Machine'))
         normalize = st.checkbox("Normalize")
         randomSeedSplit = st.checkbox("Random Split Seed")
         testPercentage = st.slider('Datasize percentage for Training.', 1, 99, 20)
@@ -50,6 +51,7 @@ def data_machineLearning(dataset):
                 mlModel = KNeighborsClassifier()
             elif model == 'Support Vector Machine':
                 mlModel = SVC(random_state=42)
+
             mlModel.fit(X_train, Y_train)
             pred = mlModel.predict(X_train)
             st.write("Accuracy on trained data:\n================================================")
@@ -57,6 +59,62 @@ def data_machineLearning(dataset):
             pred = mlModel.predict(X_test)
             st.write("Accuracy on untrained data:\n================================================")
             st.write(f"Accuracy Score: {accuracy_score(Y_test, pred) * 100:.2f}%")
+    # with st.form("predict_heart_attack_form"):
+    #     st.write('Predict Heart Attack')
+    #     col1, col2, col3 = st.columns(3)
+    #     with col1:
+    #         age = st.number_input('Age')
+    #         anemia = st.selectbox('Anemia', ('Yes', 'No'))
+    #         creatine = st.number_input('Creatinine Phosphokinase')
+    #         ejectionFraction = st.number_input('Ejection_Fraction')
+    #     with col2:
+    #         sex = st.selectbox('Gender', ('Man', 'Woman'))
+    #         diabetes = st.selectbox('Diabetes', ('Yes', 'No'))
+    #         platelets = st.number_input('Platelets')
+    #         serumSodium = st.number_input('Serum Sodium')
+    #     with col3:
+    #         smoking = st.selectbox('Smoking', ('Yes', 'No'))
+    #         highBP = st.selectbox('High blood Pressure', ('Yes', 'No'))
+    #         serumCreatinine = st.number_input('Serum Creatinine')
+    #     submitted = st.form_submit_button("Predict")
+    #     # Process values from form .
+    #     if submitted:
+    #         if anemia == 'Yes':
+    #             anemia = 1
+    #         else:
+    #             anemia = 0
+    #
+    #         if sex == 'Woman':
+    #             sex = 1
+    #         else:
+    #             sex = 0
+    #
+    #         if smoking == 'Yes':
+    #             smoking = 1
+    #         else:
+    #             smoking = 0
+    #
+    #         if highBP == 'Yes':
+    #             highBP = 1
+    #         else:
+    #             highBP = 0
+    #
+    #         if diabetes == 'Yes':
+    #             diabetes = 1
+    #         else:
+    #             diabetes = 0
+    #         data = [[age, anemia, creatine, diabetes, ejectionFraction, highBP, platelets, serumCreatinine, serumSodium,
+    #                  sex, smoking], ]
+    #         myPredictionData = pd.DataFrame(data, columns=['age', 'anaemia', 'creatinine_phosphokinase', 'diabetes',
+    #                                                        'ejection_fraction', 'high_blood_pressure', 'platelets',
+    #                                                        'serum_creatinine', 'serum_sodium', 'sex', 'smoking'])
+    #         print(mlModel.predict(myPredictionData))
+    #         print(mlModel.predict_proba(myPredictionData))
+
+
+def pred_heart_attack(data, model):
+    print(model.predict(data))
+    print(model.predict_proba(data))
 
 
 def clean_dataset(dataset):
