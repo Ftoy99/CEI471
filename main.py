@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as pyplot
@@ -14,6 +15,13 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
+
+
+
+
+
+
+
 
 
 def data_machineLearning(dataset):
@@ -300,10 +308,18 @@ def data_analysis(dataset):
             st.pyplot(fig)
 
 
+
+
+
 def main():
     # initializing streamlit
     # TODO ADD STUFF IN SIDEBAR ?
-    st.sidebar.selectbox("smth", "optins in list here")
+
+    st.sidebar.button("HOME")
+    st.sidebar.button("Data Cleaning")
+    st.sidebar.button("Data Analysis")
+    st.sidebar.button("Data Processing")
+
     with st.container():
         st.title("CEI 471 Semester Project")
         st.header("Group 2")
