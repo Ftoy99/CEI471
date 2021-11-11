@@ -233,6 +233,11 @@ def data_analysis(dataset):
 
 
 def machine_learning(dataset, model, testPercentage):
+    # Clean
+    dataset['age'] = dataset['age'].astype(numpy.int64)
+    dataset['platelets'] = dataset['platelets'].astype(numpy.int64)
+    dataset['serum_creatinine'] = dataset['serum_creatinine'].map('{:,.2f}'.format)
+    del (dataset["time"])
     # Split dataset .
     X = dataset.drop('DEATH_EVENT', axis=1)
     Y = dataset['DEATH_EVENT']
@@ -247,10 +252,12 @@ def machine_learning(dataset, model, testPercentage):
     elif model == 'K-Nearest Neighbors':
         mlModel = KNeighborsClassifier()
     elif model == 'Support Vector Machine':
-        mlModel = SVC(random_state=42)
+        mlModel = SVC(random_state=42,probability=True)
     mlModel.fit(X_train, Y_train)
     pred = mlModel.predict(X_train)
+
     st.sidebar.write(f"Accuracy Score on trained data: {accuracy_score(Y_train, pred) * 100:.2f}%")
+
     pred = mlModel.predict(X_test)
     st.sidebar.write(f"Accuracy Score on untrained data: {accuracy_score(Y_test, pred) * 100:.2f}%")
 
@@ -258,19 +265,22 @@ def machine_learning(dataset, model, testPercentage):
         st.write('Predict Heart Attack')
         col1, col2, col3 = st.columns(3)
         with col1:
-            age = st.number_input('Age')
+            age = st.number_input('Age', step=1, min_value=0, max_value=100)
             anemia = st.selectbox('Anemia', ('Yes', 'No'))
             creatine = st.number_input('Creatinine Phosphokinase')
-            ejectionFraction = st.number_input('Ejection_Fraction')
+            ejectionFraction = st.number_input(label='Ejection_Fraction', step=1, min_value=0, max_value=100)
+
         with col2:
             sex = st.selectbox('Gender', ('Man', 'Woman'))
             diabetes = st.selectbox('Diabetes', ('Yes', 'No'))
-            platelets = st.number_input('Platelets')
-            serumSodium = st.number_input('Serum Sodium')
+            platelets = st.number_input(label='Platelets', step=1000, min_value=0)
+            serumSodium = st.number_input(label='Serum Sodium', step=1, min_value=0)
+
         with col3:
             smoking = st.selectbox('Smoking', ('Yes', 'No'))
             highBP = st.selectbox('High blood Pressure', ('Yes', 'No'))
-            serumCreatinine = st.number_input('Serum Creatinine')
+            serumCreatinine = st.number_input(label='Serum Creatinine', step=0.01, min_value=0.00)
+
         submitted = st.form_submit_button("Predict")
         # Process values from form .
         if submitted:
@@ -298,14 +308,17 @@ def machine_learning(dataset, model, testPercentage):
                 diabetes = 1
             else:
                 diabetes = 0
-            data = [[age, anemia, creatine, diabetes, ejectionFraction, highBP, platelets, serumCreatinine, serumSodium,
+            data = [[int(age), anemia, creatine, diabetes, ejectionFraction, highBP, platelets, serumCreatinine,
+                     serumSodium,
                      sex, smoking], ]
-            myPredictionData = pd.DataFrame(data, columns=['age', 'anaemia', 'creatinine_phosphokinase', 'diabetes',
-                                                           'ejection_fraction', 'high_blood_pressure', 'platelets',
-                                                           'serum_creatinine', 'serum_sodium', 'sex', 'smoking'])
+            myPredictionData = pd.DataFrame(data)
             st.write(myPredictionData)
-            print(mlModel.predict(myPredictionData))
-            print(mlModel.predict_proba(myPredictionData))
+            # TODO Fix warning here
+            print(data)
+            st.write(mlModel.predict(data))
+            st.write(mlModel.predict_proba(data))
+            print(mlModel.predict(data))
+            print(mlModel.predict_proba(data))
 
 
 def main():
