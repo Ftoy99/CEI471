@@ -16,102 +16,6 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 
 
-def data_machineLearning(dataset):
-    # TODO MAKE THIS DYNAMIC WITH USER INPUTS AND PARAMETERS.
-    st.header('Heart Attack Prediction With Machine Learning')
-    st.write('description')
-    # Form for Machine Learning
-    with st.form("ml_form"):
-        st.write("Machine Learning")
-        model = st.selectbox('Chose Machine Learning Algorithm',
-                             ('Logistic Regression', 'K-Nearest Neighbors', 'Support Vector Machine'))
-        normalize = st.checkbox("Normalize")
-        randomSeedSplit = st.checkbox("Random Split Seed")
-        testPercentage = st.slider('Datasize percentage for Training.', 1, 99, 20)
-        submitted = st.form_submit_button("Train")
-        if submitted:
-            # Split dataset .
-            X = dataset.drop('DEATH_EVENT', axis=1)
-            Y = dataset['DEATH_EVENT']
-            if randomSeedSplit:
-                X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=int(testPercentage) / 100)
-            else:
-                X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=int(testPercentage) / 100,
-                                                                    random_state=42)
-            if normalize:
-                # Normalize: Standardizing the data will transform the data so
-                # that its distribution will have a mean of 0 and a standard deviation of 1.
-                sc = StandardScaler()
-                X_train = sc.fit_transform(X_train)
-                X_test = sc.transform(X_test)
-            # Models go here
-            if model == 'Logistic Regression':
-                mlModel = LogisticRegression(random_state=0)
-            elif model == 'K-Nearest Neighbors':
-                mlModel = KNeighborsClassifier()
-            elif model == 'Support Vector Machine':
-                mlModel = SVC(random_state=42)
-
-            mlModel.fit(X_train, Y_train)
-            pred = mlModel.predict(X_train)
-            st.write("Accuracy on trained data:\n================================================")
-            st.write(f"Accuracy Score: {accuracy_score(Y_train, pred) * 100:.2f}%")
-            pred = mlModel.predict(X_test)
-            st.write("Accuracy on untrained data:\n================================================")
-            st.write(f"Accuracy Score: {accuracy_score(Y_test, pred) * 100:.2f}%")
-    # with st.form("predict_heart_attack_form"):
-    #     st.write('Predict Heart Attack')
-    #     col1, col2, col3 = st.columns(3)
-    #     with col1:
-    #         age = st.number_input('Age')
-    #         anemia = st.selectbox('Anemia', ('Yes', 'No'))
-    #         creatine = st.number_input('Creatinine Phosphokinase')
-    #         ejectionFraction = st.number_input('Ejection_Fraction')
-    #     with col2:
-    #         sex = st.selectbox('Gender', ('Man', 'Woman'))
-    #         diabetes = st.selectbox('Diabetes', ('Yes', 'No'))
-    #         platelets = st.number_input('Platelets')
-    #         serumSodium = st.number_input('Serum Sodium')
-    #     with col3:
-    #         smoking = st.selectbox('Smoking', ('Yes', 'No'))
-    #         highBP = st.selectbox('High blood Pressure', ('Yes', 'No'))
-    #         serumCreatinine = st.number_input('Serum Creatinine')
-    #     submitted = st.form_submit_button("Predict")
-    #     # Process values from form .
-    #     if submitted:
-    #         if anemia == 'Yes':
-    #             anemia = 1
-    #         else:
-    #             anemia = 0
-    #
-    #         if sex == 'Woman':
-    #             sex = 1
-    #         else:
-    #             sex = 0
-    #
-    #         if smoking == 'Yes':
-    #             smoking = 1
-    #         else:
-    #             smoking = 0
-    #
-    #         if highBP == 'Yes':
-    #             highBP = 1
-    #         else:
-    #             highBP = 0
-    #
-    #         if diabetes == 'Yes':
-    #             diabetes = 1
-    #         else:
-    #             diabetes = 0
-    #         data = [[age, anemia, creatine, diabetes, ejectionFraction, highBP, platelets, serumCreatinine, serumSodium,
-    #                  sex, smoking], ]
-    #         myPredictionData = pd.DataFrame(data, columns=['age', 'anaemia', 'creatinine_phosphokinase', 'diabetes',
-    #                                                        'ejection_fraction', 'high_blood_pressure', 'platelets',
-    #                                                        'serum_creatinine', 'serum_sodium', 'sex', 'smoking'])
-    #         print(mlModel.predict(myPredictionData))
-    #         print(mlModel.predict_proba(myPredictionData))
-
-
 def pred_heart_attack(data, model):
     print(model.predict(data))
     print(model.predict_proba(data))
@@ -143,11 +47,15 @@ def clean_dataset(dataset):
 
 
 def data_analysis(dataset):
+    # Clean dataset
+    dataset['age'] = dataset['age'].astype(numpy.int64)
+    dataset['platelets'] = dataset['platelets'].astype(numpy.int64)
+    dataset['serum_creatinine'] = dataset['serum_creatinine'].map('{:,.2f}'.format)
+    del (dataset["time"])
     st.header('Data Analysis and Statistics')
     st.write('text')
 
-
-    #Corellation Matrix
+    # Corellation Matrix
     corr_matrix = dataset.corr()
     fig, ax = pyplot.subplots()
     ax = sns.heatmap(corr_matrix,
@@ -164,8 +72,6 @@ def data_analysis(dataset):
     # pyplot.margins(0)
     # fig = sns.pairplot(subData)
     # st.pyplot(fig)
-
-
 
     col1, col2 = st.columns(2)
     # SEX PLOT
@@ -309,12 +215,12 @@ def data_analysis(dataset):
         x = [0, 1]
         default_x_ticks = range(len(x))
         pyplot.xticks(default_x_ticks, x, size=30)
-        pyplot.yticks(size = 25)
+        pyplot.yticks(size=25)
         pyplot.margins(0.5, 0.1)
 
-        pyplot.title("Test", size = 75)
-        pyplot.xlabel("High Blood Pressure", size = 50)
-        pyplot.ylabel("Age",size = 50)
+        pyplot.title("Test", size=75)
+        pyplot.xlabel("High Blood Pressure", size=50)
+        pyplot.ylabel("Age", size=50)
         x = dataset.high_blood_pressure[dataset['DEATH_EVENT'] == 0]
         y = dataset.age[dataset['DEATH_EVENT'] == 0]
         pyplot.scatter(x, y, c="darkorange")
@@ -326,33 +232,107 @@ def data_analysis(dataset):
         st.pyplot(fig)
 
 
+def machine_learning(dataset, model, testPercentage):
+    # Split dataset .
+    X = dataset.drop('DEATH_EVENT', axis=1)
+    Y = dataset['DEATH_EVENT']
+    X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=int(testPercentage) / 100,
+                                                        random_state=42)
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+    # Models go here
+    if model == 'Logistic Regression':
+        mlModel = LogisticRegression(random_state=0)
+    elif model == 'K-Nearest Neighbors':
+        mlModel = KNeighborsClassifier()
+    elif model == 'Support Vector Machine':
+        mlModel = SVC(random_state=42)
+    mlModel.fit(X_train, Y_train)
+    pred = mlModel.predict(X_train)
+    st.sidebar.write(f"Accuracy Score on trained data: {accuracy_score(Y_train, pred) * 100:.2f}%")
+    pred = mlModel.predict(X_test)
+    st.sidebar.write(f"Accuracy Score on untrained data: {accuracy_score(Y_test, pred) * 100:.2f}%")
 
+    with st.form("predict_heart_attack_form"):
+        st.write('Predict Heart Attack')
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            age = st.number_input('Age')
+            anemia = st.selectbox('Anemia', ('Yes', 'No'))
+            creatine = st.number_input('Creatinine Phosphokinase')
+            ejectionFraction = st.number_input('Ejection_Fraction')
+        with col2:
+            sex = st.selectbox('Gender', ('Man', 'Woman'))
+            diabetes = st.selectbox('Diabetes', ('Yes', 'No'))
+            platelets = st.number_input('Platelets')
+            serumSodium = st.number_input('Serum Sodium')
+        with col3:
+            smoking = st.selectbox('Smoking', ('Yes', 'No'))
+            highBP = st.selectbox('High blood Pressure', ('Yes', 'No'))
+            serumCreatinine = st.number_input('Serum Creatinine')
+        submitted = st.form_submit_button("Predict")
+        # Process values from form .
+        if submitted:
+            if anemia == 'Yes':
+                anemia = 1
+            else:
+                anemia = 0
 
+            if sex == 'Woman':
+                sex = 1
+            else:
+                sex = 0
 
+            if smoking == 'Yes':
+                smoking = 1
+            else:
+                smoking = 0
+
+            if highBP == 'Yes':
+                highBP = 1
+            else:
+                highBP = 0
+
+            if diabetes == 'Yes':
+                diabetes = 1
+            else:
+                diabetes = 0
+            data = [[age, anemia, creatine, diabetes, ejectionFraction, highBP, platelets, serumCreatinine, serumSodium,
+                     sex, smoking], ]
+            myPredictionData = pd.DataFrame(data, columns=['age', 'anaemia', 'creatinine_phosphokinase', 'diabetes',
+                                                           'ejection_fraction', 'high_blood_pressure', 'platelets',
+                                                           'serum_creatinine', 'serum_sodium', 'sex', 'smoking'])
+            st.write(myPredictionData)
+            print(mlModel.predict(myPredictionData))
+            print(mlModel.predict_proba(myPredictionData))
 
 
 def main():
     # initializing streamlit
-    # TODO ADD STUFF IN SIDEBAR ?
-    st.sidebar.selectbox("smth", "optins in list here")
-    with st.container():
-        st.title("CEI 471 Semester Project")
-        st.header("Group 2")
-        st.write("""
-                - Christos Christodoulou
-                - Danny Kahtan
-                - Dimitris Ioannou
-                """)
-    with st.container():
-        st.header("Assignment")
-        st.write(
-            "From historical data given follow the necessary steps to predict the chance of a heart attack and death.")
-        dataset = st.file_uploader(label="Select a dataset for the model to train on it.", type=["csv"])
+    st.sidebar.title("CEI 471 Semester Project")
+    st.sidebar.write('Heart Attack Prediction With Machine Learning')
+    st.sidebar.header("Group 2")
+    st.sidebar.write("""
+            - Christos Christodoulou
+            - Danny Kahtan
+            - Dimitris Ioannou
+            """)
+    dataset = st.sidebar.file_uploader(label="Load your dataset.", type=["csv"])
+    # Form for Machine Learning
     if dataset is not None:
         dataset = pd.read_csv(dataset)
-        dataset = clean_dataset(dataset)
-        data_analysis(dataset)
-        data_machineLearning(dataset)
+        op = st.sidebar.selectbox('Select View',
+                                  ('Data Cleaning', 'Data Analysis', 'Machine Learning'))
+        if op == 'Data Cleaning':
+            clean_dataset(dataset)
+        elif op == 'Data Analysis':
+            data_analysis(dataset)
+        elif op == 'Machine Learning':
+            model = st.sidebar.selectbox('Chose Machine Learning Algorithm',
+                                         ('Logistic Regression', 'K-Nearest Neighbors', 'Support Vector Machine'))
+            testPercentage = st.sidebar.slider('Datasize percentage for testing.', 10, 90, 20)
+            machine_learning(dataset, model, testPercentage)
 
 
 if __name__ == "__main__":
