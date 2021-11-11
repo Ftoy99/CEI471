@@ -153,6 +153,28 @@ def clean_dataset(dataset):
 def data_analysis(dataset):
     st.header('Data Analysis and Statistics')
     st.write('text')
+
+
+    #Corellation Matrix
+    corr_matrix = dataset.corr()
+    fig, ax = pyplot.subplots()
+    ax = sns.heatmap(corr_matrix,
+                     annot=True,
+                     linewidths=0.5,
+                     fmt=".2f",
+                     cmap="YlGnBu")
+
+    bottom, top = ax.get_ylim()
+    st.pyplot(fig)
+
+    # #PairPlot
+    # subData = dataset[['age', 'creatinine_phosphokinase', 'ejection_fraction', 'platelets', 'serum_sodium']]
+    # pyplot.margins(0)
+    # fig = sns.pairplot(subData)
+    # st.pyplot(fig)
+
+
+
     col1, col2 = st.columns(2)
     # SEX PLOT
     with col1:
@@ -281,31 +303,40 @@ def data_analysis(dataset):
 
     col5, col6 = st.columns(2)
     with col5:
-        fig, ax = pyplot.subplots()
-        pyplot.title("Test")
-        pyplot.xlabel("age")
-        pyplot.ylabel("Platelets")
-        x = dataset.age[dataset['DEATH_EVENT'] == 0]
-        y = dataset.platelets[dataset['DEATH_EVENT'] == 0]
-        pyplot.scatter(x, y, c="darkorange")
+        fig = sns.catplot(x="DEATH_EVENT", y="age", hue="smoking", kind="bar", data=dataset)
 
-        k = dataset.age[dataset['DEATH_EVENT'] == 1]
-        l = dataset.platelets[dataset['DEATH_EVENT'] == 1]
-        pyplot.scatter(k, l, c="dimgray")
-        pyplot.legend(["Death", "No Death"])
+        pyplot.title('Death Incidents from High Blood Pressure', size=25)
+        pyplot.xlabel('Death People', size=20)
+        pyplot.ylabel('People', size=20)
+
         st.pyplot(fig)
 
-        with col6:
-            corr_matrix = dataset.corr()
-            fig, ax = pyplot.subplots()
-            ax = sns.heatmap(corr_matrix,
-                             annot=True,
-                             linewidths=0.5,
-                             fmt=".2f",
-                             cmap="YlGnBu")
+    with col6:
+        fig, ax = pyplot.subplots()
 
-            bottom, top = ax.get_ylim()
-            st.pyplot(fig)
+        x = [0, 1]
+        default_x_ticks = range(len(x))
+        pyplot.xticks(default_x_ticks, x, size=30)
+        pyplot.yticks(size = 25)
+        pyplot.margins(0.5, 0.1)
+
+        pyplot.title("Test", size = 75)
+        pyplot.xlabel("High Blood Pressure", size = 50)
+        pyplot.ylabel("Age",size = 50)
+        x = dataset.high_blood_pressure[dataset['DEATH_EVENT'] == 0]
+        y = dataset.age[dataset['DEATH_EVENT'] == 0]
+        pyplot.scatter(x, y, c="darkorange")
+
+        k = dataset.sex[dataset['DEATH_EVENT'] == 1]
+        l = dataset.age[dataset['DEATH_EVENT'] == 1]
+        pyplot.scatter(k, l, c="dimgray")
+        pyplot.legend(["No Death", "Death"])
+        st.pyplot(fig)
+
+
+
+
+
 
 
 
