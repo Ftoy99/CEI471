@@ -53,7 +53,12 @@ def data_analysis(dataset):
     dataset['serum_creatinine'] = dataset['serum_creatinine'].map('{:,.2f}'.format)
     del (dataset["time"])
     st.header('Data Analysis and Statistics')
-    st.write('text')
+    with st.expander("Correlation Matrix"):
+        st.write("""
+           Correlation Matrix- let’s you see correlations between all variables.
+
+    Within seconds, you can see whether something is positively or negatively correlated with our predictor (Death event).
+        """)
 
     # Corellation Matrix
     corr_matrix = dataset.corr()
@@ -67,6 +72,9 @@ def data_analysis(dataset):
     bottom, top = ax.get_ylim()
     st.pyplot(fig)
 
+
+
+
     # #PairPlot
     # subData = dataset[['age', 'creatinine_phosphokinase', 'ejection_fraction', 'platelets', 'serum_sodium']]
     # pyplot.margins(0)
@@ -75,6 +83,7 @@ def data_analysis(dataset):
 
     col1, col2 = st.columns(2)
     # SEX PLOT
+
     with col1:
         fig, ax = pyplot.subplots()
         N, bins, patches = ax.hist(dataset["sex"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
