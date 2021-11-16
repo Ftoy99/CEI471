@@ -81,146 +81,164 @@ def data_analysis(dataset):
     # fig = sns.pairplot(subData)
     # st.pyplot(fig)
 
-    #COMPARISON PAIRPLOT
-    st.header('COMPARISON PLOT')
+    col1, col2 = st.columns(2)
+    # SEX PLOT
 
-    fig, ax = pyplot.subplots()
+    with col1:
+        fig, ax = pyplot.subplots()
+        N, bins, patches = ax.hist(dataset["sex"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
+        pyplot.xticks((0, 1), ["Male", "Female"])
+        pyplot.ylabel("People")
+        # ax.set_xticklabels("Male", "Female")
+        pyplot.title("Genders")
+        patches[0].set_facecolor('royalblue')
+        patches[1].set_facecolor('crimson')
+        ax.hist(dataset.sex[dataset['DEATH_EVENT'] == 1], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7,
+                color="darkorange")
+        # Legend
+        crimson_patch = mpatches.Patch(color='crimson', label='Women')
+        royalblue_patch = mpatches.Patch(color='royalblue', label='Men')
+        darkorange_patch = mpatches.Patch(color='darkorange', label='Death')
+        pyplot.legend(handles=[crimson_patch, royalblue_patch, darkorange_patch])
 
-    sel = st.selectbox('Select Attribute for X Axis',
-                       ('age', 'creatinine_phosphokinase', 'ejection_fraction', 'platelets', 'serum_sodium'))
+        # Data on graph.
+        men = len(dataset[(dataset['sex'] == 0)])
+        women = len(dataset[(dataset['sex'] == 1)])
+        menDied = len(dataset[(dataset['sex'] == 0) & (dataset['DEATH_EVENT'] == 1)])
+        womenDied = len(dataset[(dataset['sex'] == 1) & (dataset['DEATH_EVENT'] == 1)])
+        pyplot.text(0, men + 1, men)
+        pyplot.text(0, menDied + 1, str(round((menDied / men) * 100)) + '%')
+        pyplot.text(1, women + 1, women)
+        pyplot.text(1, womenDied + 1, str(round((womenDied / women) * 100)) + '%')
 
-    sel2 = st.selectbox('Select Attribute for Y Axis',
-                        ('age', 'creatinine_phosphokinase', 'ejection_fraction', 'platelets', 'serum_sodium'))
+        st.pyplot(fig)
+    # ANEMIA PLOT
+    with col2:
+        fig, ax = pyplot.subplots()
+        N, bins, patches = ax.hist(dataset["anaemia"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
+        pyplot.xticks((0, 1), ["No Anaemia", "Anaemia"])
+        pyplot.ylabel("People")
+        # ax.set_xticklabels("Male", "Female")
+        pyplot.title("Anaemia")
+        patches[0].set_facecolor('royalblue')
+        patches[1].set_facecolor('crimson')
+        ax.hist(dataset.anaemia[dataset['DEATH_EVENT'] == 1], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7,
+                color="darkorange")
 
-    death = st.checkbox('Show death?', key=1)
+        # Legend
+        crimson_patch = mpatches.Patch(color='crimson', label='Anaemia')
+        royalblue_patch = mpatches.Patch(color='royalblue', label='NO Anaemia')
+        darkorange_patch = mpatches.Patch(color='darkorange', label='Death')
+        pyplot.legend(handles=[crimson_patch, royalblue_patch, darkorange_patch])
 
-    if death:
+        noanemia = len(dataset[(dataset['anaemia'] == 0)])
+        anaemia = len(dataset[(dataset['anaemia'] == 1)])
+        noanemiaDied = len(dataset[(dataset['anaemia'] == 0) & (dataset['DEATH_EVENT'] == 1)])
+        anemiaDied = len(dataset[(dataset['anaemia'] == 1) & (dataset['DEATH_EVENT'] == 1)])
+        pyplot.text(0, noanemia + 1, noanemia)
+        pyplot.text(0, noanemiaDied + 1, str(round((noanemiaDied / noanemia) * 100)) + '%')
+        pyplot.text(1, anaemia + 1, anaemia)
+        pyplot.text(1, anemiaDied + 1, str(round((anemiaDied / anaemia) * 100)) + '%')
 
-        if sel == 'age':
-            x1 = dataset.age[dataset['DEATH_EVENT'] == 0];
-            x2 = dataset.age[dataset['DEATH_EVENT'] == 1];
-        elif sel == 'creatinine_phosphokinase':
-            x1 = dataset.creatinine_phosphokinase[dataset['DEATH_EVENT'] == 0];
-            x2 = dataset.creatinine_phosphokinase[dataset['DEATH_EVENT'] == 1];
-        elif sel == 'ejection_fraction':
-            x1 = dataset.ejection_fraction[dataset['DEATH_EVENT'] == 0];
-            x2 = dataset.ejection_fraction[dataset['DEATH_EVENT'] == 1];
-        elif sel == 'platelets':
-            x1 = dataset.platelets[dataset['DEATH_EVENT'] == 0];
-            x2 = dataset.platelets[dataset['DEATH_EVENT'] == 1];
-        elif sel == 'serum_sodium':
-            x1 = dataset.serum_sodium[dataset['DEATH_EVENT'] == 0];
-            x2 = dataset.serum_sodium[dataset['DEATH_EVENT'] == 1];
+        st.pyplot(fig)
 
+    col3, col4 = st.columns(2)
+    # SEX PLOT
+    with col3:
+        fig, ax = pyplot.subplots()
+        # bins ???
+        N, bins, patches = ax.hist(dataset["diabetes"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
+        pyplot.xticks((0, 1), ["No Diabetes", "Diabetes"])
+        pyplot.ylabel("People")
+        # ax.set_xticklabels("Male", "Female")
+        pyplot.title("Diabetes")
+        patches[0].set_facecolor('royalblue')
+        patches[1].set_facecolor('crimson')
+        ax.hist(dataset.diabetes[dataset['DEATH_EVENT'] == 1], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7,
+                color="darkorange")
+        # Legend
+        crimson_patch = mpatches.Patch(color='crimson', label='Diabetes')
+        royalblue_patch = mpatches.Patch(color='royalblue', label='No Diabetes')
+        darkorange_patch = mpatches.Patch(color='darkorange', label='Death')
+        pyplot.legend(handles=[crimson_patch, royalblue_patch, darkorange_patch])
 
-        if sel2 == 'age':
-            y1 = dataset.age[dataset['DEATH_EVENT'] == 0];
-            y2 = dataset.age[dataset['DEATH_EVENT'] == 1];
-        elif sel2 == 'creatinine_phosphokinase':
-            y1 = dataset.creatinine_phosphokinase[dataset['DEATH_EVENT'] == 0];
-            y2 = dataset.creatinine_phosphokinase[dataset['DEATH_EVENT'] == 1];
-        elif sel2 == 'ejection_fraction':
-            y1 = dataset.ejection_fraction[dataset['DEATH_EVENT'] == 0];
-            y2 = dataset.ejection_fraction[dataset['DEATH_EVENT'] == 1];
-        elif sel2 == 'platelets':
-            y1 = dataset.platelets[dataset['DEATH_EVENT'] == 0];
-            y2 = dataset.platelets[dataset['DEATH_EVENT'] == 1];
-        elif sel2 == 'serum_sodium':
-            y1 = dataset.serum_sodium[dataset['DEATH_EVENT'] == 0];
-            y2 = dataset.serum_sodium[dataset['DEATH_EVENT'] == 1];
+        nodiabetes = len(dataset[(dataset['diabetes'] == 0)])
+        diabetes = len(dataset[(dataset['diabetes'] == 1)])
+        nodiabetesDied = len(dataset[(dataset['diabetes'] == 0) & (dataset['DEATH_EVENT'] == 1)])
+        diabetesDied = len(dataset[(dataset['diabetes'] == 1) & (dataset['DEATH_EVENT'] == 1)])
+        pyplot.text(0, nodiabetes + 1, nodiabetes)
+        pyplot.text(0, nodiabetesDied + 1, str(round((nodiabetesDied / nodiabetes) * 100)) + '%')
+        pyplot.text(1, diabetes + 1, diabetes)
+        pyplot.text(1, diabetesDied + 1, str(round((diabetesDied / diabetes) * 100)) + '%')
 
-        pyplot.scatter(x1, y1, c="darkorange")
-        pyplot.scatter(x2, y2, c="dimgray")
-        pyplot.xlabel(sel, size=40)
-        pyplot.ylabel(sel2, size=40)
+        st.pyplot(fig)
+    # Smoking PLOT
+    with col4:
+        fig, ax = pyplot.subplots()
+        N, bins, patches = ax.hist(dataset["smoking"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
+        pyplot.xticks((0, 1), ["No Smoking", "Smoking"])
+        pyplot.ylabel("People")
+        # ax.set_xticklabels("Male", "Female")
+        pyplot.title("Smoking")
+        patches[0].set_facecolor('royalblue')
+        patches[1].set_facecolor('crimson')
+        ax.hist(dataset.smoking[dataset['DEATH_EVENT'] == 1], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7,
+                color="darkorange")
+
+        # Legend
+        crimson_patch = mpatches.Patch(color='crimson', label='Smoking')
+        royalblue_patch = mpatches.Patch(color='royalblue', label='No Smoking')
+        darkorange_patch = mpatches.Patch(color='darkorange', label='Death')
+        pyplot.legend(handles=[crimson_patch, royalblue_patch, darkorange_patch])
+
+        nosmoking = len(dataset[(dataset['smoking'] == 0)])
+        smoking = len(dataset[(dataset['smoking'] == 1)])
+        nosmokingDied = len(dataset[(dataset['smoking'] == 0) & (dataset['DEATH_EVENT'] == 1)])
+        smokingDied = len(dataset[(dataset['smoking'] == 1) & (dataset['DEATH_EVENT'] == 1)])
+        pyplot.text(0, nosmoking + 1, nosmoking)
+        pyplot.text(0, nosmokingDied + 1, str(round((nosmokingDied / nosmoking) * 100)) + '%')
+        pyplot.text(1, smoking + 1, smoking)
+        pyplot.text(1, smokingDied + 1, str(round((smokingDied / smoking) * 100)) + '%')
+
+        rcParams['figure.figsize'] = 20, 14
+        pyplot.matshow(dataset.corr())
+        pyplot.yticks(np.arange(dataset.shape[1]), dataset.columns)
+        pyplot.xticks(np.arange(dataset.shape[1]), dataset.columns)
+        pyplot.colorbar()
+
+        st.pyplot(fig)
+
+    col5, col6 = st.columns(2)
+    with col5:
+        fig = sns.catplot(x="DEATH_EVENT", y="age", hue="smoking", kind="bar", data=dataset)
+
+        pyplot.title('Death Incidents from High Blood Pressure', size=25)
+        pyplot.xlabel('Death People', size=20)
+        pyplot.ylabel('People', size=20)
+
+        st.pyplot(fig)
+
+    with col6:
+        fig, ax = pyplot.subplots()
+
+        x = [0, 1]
+        default_x_ticks = range(len(x))
+        pyplot.xticks(default_x_ticks, x, size=30)
+        pyplot.yticks(size=25)
+        pyplot.margins(0.5, 0.1)
+
+        pyplot.title("Test", size=75)
+        pyplot.xlabel("High Blood Pressure", size=50)
+        pyplot.ylabel("Age", size=50)
+        x = dataset.high_blood_pressure[dataset['DEATH_EVENT'] == 0]
+        y = dataset.age[dataset['DEATH_EVENT'] == 0]
+        pyplot.scatter(x, y, c="darkorange")
+
+        k = dataset.sex[dataset['DEATH_EVENT'] == 1]
+        l = dataset.age[dataset['DEATH_EVENT'] == 1]
+        pyplot.scatter(k, l, c="dimgray")
         pyplot.legend(["No Death", "Death"])
         st.pyplot(fig)
-
-    else:
-        if sel == 'age':
-            x = dataset.age;
-        elif sel == 'creatinine_phosphokinase':
-            x = dataset.creatinine_phosphokinase;
-        elif sel == 'ejection_fraction':
-            x = dataset.ejection_fraction;
-        elif sel == 'platelets':
-            x = dataset.platelets;
-        elif sel == 'serum_sodium':
-            x = dataset.serum_sodium;
-
-        if sel2 == 'age':
-            y = dataset.age;
-        elif sel2 == 'creatinine_phosphokinase':
-            y = dataset.creatinine_phosphokinase;
-        elif sel2 == 'ejection_fraction':
-            y = dataset.ejection_fraction;
-        elif sel2 == 'platelets':
-            y = dataset.platelets;
-        elif sel2 == 'serum_sodium':
-            y = dataset.serum_sodium;
-
-        pyplot.scatter(x, y, c="darkorange")
-        pyplot.xlabel(sel, size=50)
-        pyplot.ylabel(sel2, size=50)
-        st.pyplot(fig)
-
-
-    # col1, col2 = st.columns(2)
-    # # SEX PLOT
-    #
-    # with col1:
-    #     fig, ax = pyplot.subplots()
-    #     N, bins, patches = ax.hist(dataset["sex"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
-    #     pyplot.xticks((0, 1), ["Male", "Female"])
-    #     pyplot.ylabel("People")
-    #     # ax.set_xticklabels("Male", "Female")
-    #     pyplot.title("Genders")
-    #     patches[0].set_facecolor('royalblue')
-    #     patches[1].set_facecolor('crimson')
-    #     ax.hist(dataset.sex[dataset['DEATH_EVENT'] == 1], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7,
-    #             color="darkorange")
-    #     # Legend
-    #     crimson_patch = mpatches.Patch(color='crimson', label='Women')
-    #     royalblue_patch = mpatches.Patch(color='royalblue', label='Men')
-    #     darkorange_patch = mpatches.Patch(color='darkorange', label='Death')
-    #     pyplot.legend(handles=[crimson_patch, royalblue_patch, darkorange_patch])
-    #
-    #     # Data on graph.
-    #     men = len(dataset[(dataset['sex'] == 0)])
-    #     women = len(dataset[(dataset['sex'] == 1)])
-    #     menDied = len(dataset[(dataset['sex'] == 0) & (dataset['DEATH_EVENT'] == 1)])
-    #     womenDied = len(dataset[(dataset['sex'] == 1) & (dataset['DEATH_EVENT'] == 1)])
-    #     pyplot.text(0, men + 1, men)
-    #     pyplot.text(0, menDied + 1, str(round((menDied / men) * 100)) + '%')
-    #     pyplot.text(1, women + 1, women)
-    #     pyplot.text(1, womenDied + 1, str(round((womenDied / women) * 100)) + '%')
-    #
-    #     st.pyplot(fig)
-
-    st.header('COUNT PLOT')
-
-    sel3 = st.selectbox('Select Attribute',
-                       ('anaemia', 'diabetes', 'high_blood_pressure', 'smoking'))
-
-    death2 = st.checkbox('Show death?', key=2)
-
-    if death2:
-        fig = sns.catplot(x=sel3, hue="DEATH_EVENT", kind="count", data=dataset)
-
-        pyplot.title('Death Incidents from '+sel3, size=25)
-        pyplot.xticks((0, 1), ["No "+sel3, sel3])
-        pyplot.xlabel(sel3, size=20)
-        pyplot.ylabel('People', size=20)
-        st.pyplot(fig)
-    else:
-        fig = sns.catplot(x=sel3, kind="count", data=dataset)
-        pyplot.xticks((0, 1), ["No " + sel3, sel3])
-        pyplot.xlabel(sel3, size=20)
-        pyplot.ylabel('People', size=20)
-        st.pyplot(fig)
-
-
-
 
 
 def machine_learning(dataset, model, testPercentage):
