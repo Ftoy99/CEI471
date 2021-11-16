@@ -72,18 +72,43 @@ def data_analysis(dataset):
     bottom, top = ax.get_ylim()
     st.pyplot(fig)
 
+    with st.expander("Correlation with target"):
+        st.write("""
+                 Correlation Matrix- let’s you see correlations between all variables.
+
+          Within seconds, you can see whether something is positively or negatively correlated with our predictor (Death event).
+              """)
+
+    fig, ax = pyplot.subplots()
+    ax = dataset.drop('DEATH_EVENT', axis=1).corrwith(dataset.DEATH_EVENT).plot(kind='bar', grid=True, figsize=(12, 8),
+                                                       title="Correlation with target")
+
+
+    st.pyplot(fig)
+
+    with st.expander("Pair Plot "):
+        st.write("""
+              Correlation Matrix- let’s you see correlations between all variables.
+
+       Within seconds, you can see whether something is positively or negatively correlated with our predictor (Death event).
+           """)
+
+     #PairPlot
+    subData = dataset[['age', 'creatinine_phosphokinase', 'ejection_fraction', 'platelets', 'serum_sodium']]
+    pyplot.margins(0)
+    fig = sns.pairplot(subData)
+    st.pyplot(fig)
 
 
 
-    # #PairPlot
-    # subData = dataset[['age', 'creatinine_phosphokinase', 'ejection_fraction', 'platelets', 'serum_sodium']]
-    # pyplot.margins(0)
-    # fig = sns.pairplot(subData)
-    # st.pyplot(fig)
+    with st.expander("Histograms"):
+        st.write("""
+                    Correlation Matrix- let’s you see correlations between all variables.
 
+             Within seconds, you can see whether something is positively or negatively correlated with our predictor (Death event).
+                 """)
+    # GENDER PLOT
     col1, col2 = st.columns(2)
-    # SEX PLOT
-
     with col1:
         fig, ax = pyplot.subplots()
         N, bins, patches = ax.hist(dataset["sex"], bins=[-.5, .5, 1.5], ec="dimgray", rwidth=0.7)
@@ -172,6 +197,13 @@ def data_analysis(dataset):
         pyplot.text(1, diabetesDied + 1, str(round((diabetesDied / diabetes) * 100)) + '%')
 
         st.pyplot(fig)
+
+        with st.expander("Cut Plot"):
+            st.write("""
+                        Correlation Matrix- let’s you see correlations between all variables.
+
+                 Within seconds, you can see whether something is positively or negatively correlated with our predictor (Death event).
+                     """)
     # Smoking PLOT
     with col4:
         fig, ax = pyplot.subplots()
@@ -265,10 +297,10 @@ def machine_learning(dataset, model, testPercentage):
     mlModel.fit(X_train, Y_train)
     pred = mlModel.predict(X_train)
 
-    st.sidebar.write(f"Accuracy Score on trained data: {accuracy_score(Y_train, pred) * 100:.2f}%")
+    st.sidebar.write(f"Training Accuracy: {accuracy_score(Y_train, pred) * 100:.2f}%")
 
     pred = mlModel.predict(X_test)
-    st.sidebar.write(f"Accuracy Score on untrained data: {accuracy_score(Y_test, pred) * 100:.2f}%")
+    st.sidebar.write(f"Testing Accuracy: {accuracy_score(Y_test, pred) * 100:.2f}%")
 
     with st.form("predict_heart_attack_form"):
         st.write('Predict Heart Attack')
@@ -321,13 +353,15 @@ def machine_learning(dataset, model, testPercentage):
                      serumSodium,
                      sex, smoking], ]
             myPredictionData = pd.DataFrame(data)
-            st.write(myPredictionData)
+            #st.write(myPredictionData)
             # TODO Fix warning here
-            print(data)
-            st.write(mlModel.predict(data))
-            st.write(mlModel.predict_proba(data))
-            print(mlModel.predict(data))
-            print(mlModel.predict_proba(data))
+            #print(data)
+            #st.write(mlModel.predict(data))
+            #st.write(mlModel.predict_proba(data))
+            #print(mlModel.predict(data))
+            st.write("Percentage of heart disease: ")
+            result=str("{0:.2f}".format(mlModel.predict_proba(data)[0][1]*100))
+            st.write(result+"%")
 
 
 def main():
