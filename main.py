@@ -234,9 +234,9 @@ def machine_learning(dataset, model, testPercentage):
     Y = dataset['DEATH_EVENT']
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=int(testPercentage) / 100,
                                                         random_state=42)
-    sc = StandardScaler()
-    X_train = sc.fit_transform(X_train)
-    X_test = sc.transform(X_test)
+    #sc = StandardScaler()
+    #X_train = sc.fit_transform(X_train)
+    #X_test = sc.transform(X_test)
     # Models go here
     if model == 'Logistic Regression':
         mlModel = LogisticRegression(random_state=0)
@@ -302,14 +302,15 @@ def machine_learning(dataset, model, testPercentage):
             data = [[int(age), anemia, creatine, diabetes, ejectionFraction, highBP, platelets, serumCreatinine,
                      serumSodium,
                      sex, smoking], ]
-            myPredictionData = pd.DataFrame(data)
-            st.write(myPredictionData)
+            # st.write(myPredictionData)
             # TODO Fix warning here
-            print(data)
-            st.write(mlModel.predict(data))
-            st.write(mlModel.predict_proba(data))
-            print(mlModel.predict(data))
-            print(mlModel.predict_proba(data))
+            # print(data)
+            # st.write(mlModel.predict(data))
+            # st.write(mlModel.predict_proba(data))
+            # print(mlModel.predict(data))
+            st.write("Percentage of heart disease: ")
+            result = str("{0:.2f}".format(mlModel.predict_proba(data)[0][1] * 100))
+            st.write(result + "%")
 
 
 def main():
