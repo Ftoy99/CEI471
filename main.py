@@ -224,6 +224,40 @@ def data_analysis(dataset):
 
 
 def machine_learning(dataset, model, testPercentage):
+    with st.expander("Machine Learning"):
+        st.write(
+            "The machine Learning part of this streamlit programs initializes with the model selected from the sidebar.")
+        code = '''
+           if model == 'Logistic Regression':
+               mlModel = LogisticRegression(random_state=0)
+           elif model == 'K-Nearest Neighbors':
+               mlModel = KNeighborsClassifier()
+           elif model == 'Support Vector Machine':
+               mlModel = SVC(random_state=42, probability=True)
+           '''
+
+        st.code(code, language='python')
+        st.write("Next we split our dataset into training and testing data. We use the percentage from the sidebar.")
+        code = '''X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=int(testPercentage) / 100,random_state=42)
+           '''
+        st.code(code, language='python')
+
+        st.write("Now with our split data we train our model.")
+        code = '''mlModel.fit(X_train, Y_train)
+           '''
+        st.code(code, language='python')
+
+        st.write("To make predictions we use the predict function with a dataframe."
+                 "Note:The method returns a dataframe collum with the expected output.")
+        code = '''mlModel.predict(myDataFrame)'''
+        st.code(code, language='python')
+        st.write("To get a probability output we must use the probability method.")
+        code = '''mlModel.predict_proba(myDataFrame)'''
+        st.code(code, language='python')
+
+    with st.expander("Machine Learning Models"):
+        pass
+
     # Clean
     dataset['age'] = dataset['age'].astype(numpy.int64)
     dataset['platelets'] = dataset['platelets'].astype(numpy.int64)
