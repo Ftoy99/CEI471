@@ -257,9 +257,9 @@ def machine_learning(dataset, model, testPercentage):
     Y = dataset['DEATH_EVENT']
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=int(testPercentage) / 100,
                                                         random_state=42)
-    sc = StandardScaler()
-    X_train = sc.fit_transform(X_train)
-    X_test = sc.transform(X_test)
+    # sc = StandardScaler()
+    # X_train = sc.fit_transform(X_train)
+    # X_test = sc.transform(X_test)
     # Models go here
     if model == 'Logistic Regression':
         mlModel = LogisticRegression(random_state=0)
