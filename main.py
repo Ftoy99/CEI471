@@ -72,16 +72,13 @@ def data_analysis(dataset):
     bottom, top = ax.get_ylim()
     st.pyplot(fig)
 
-
-
-
     # #PairPlot
     # subData = dataset[['age', 'creatinine_phosphokinase', 'ejection_fraction', 'platelets', 'serum_sodium']]
     # pyplot.margins(0)
     # fig = sns.pairplot(subData)
     # st.pyplot(fig)
 
-    #COMPARISON PAIRPLOT
+    # COMPARISON PAIRPLOT
     st.header('COMPARISON PLOT')
 
     fig, ax = pyplot.subplots()
@@ -97,37 +94,36 @@ def data_analysis(dataset):
     if death:
 
         if sel == 'age':
-            x1 = dataset.age[dataset['DEATH_EVENT'] == 0];
-            x2 = dataset.age[dataset['DEATH_EVENT'] == 1];
+            x1 = dataset.age[dataset['DEATH_EVENT'] == 0]
+            x2 = dataset.age[dataset['DEATH_EVENT'] == 1]
         elif sel == 'creatinine_phosphokinase':
-            x1 = dataset.creatinine_phosphokinase[dataset['DEATH_EVENT'] == 0];
-            x2 = dataset.creatinine_phosphokinase[dataset['DEATH_EVENT'] == 1];
+            x1 = dataset.creatinine_phosphokinase[dataset['DEATH_EVENT'] == 0]
+            x2 = dataset.creatinine_phosphokinase[dataset['DEATH_EVENT'] == 1]
         elif sel == 'ejection_fraction':
-            x1 = dataset.ejection_fraction[dataset['DEATH_EVENT'] == 0];
-            x2 = dataset.ejection_fraction[dataset['DEATH_EVENT'] == 1];
+            x1 = dataset.ejection_fraction[dataset['DEATH_EVENT'] == 0]
+            x2 = dataset.ejection_fraction[dataset['DEATH_EVENT'] == 1]
         elif sel == 'platelets':
-            x1 = dataset.platelets[dataset['DEATH_EVENT'] == 0];
-            x2 = dataset.platelets[dataset['DEATH_EVENT'] == 1];
+            x1 = dataset.platelets[dataset['DEATH_EVENT'] == 0]
+            x2 = dataset.platelets[dataset['DEATH_EVENT'] == 1]
         elif sel == 'serum_sodium':
-            x1 = dataset.serum_sodium[dataset['DEATH_EVENT'] == 0];
-            x2 = dataset.serum_sodium[dataset['DEATH_EVENT'] == 1];
-
+            x1 = dataset.serum_sodium[dataset['DEATH_EVENT'] == 0]
+            x2 = dataset.serum_sodium[dataset['DEATH_EVENT'] == 1]
 
         if sel2 == 'age':
-            y1 = dataset.age[dataset['DEATH_EVENT'] == 0];
-            y2 = dataset.age[dataset['DEATH_EVENT'] == 1];
+            y1 = dataset.age[dataset['DEATH_EVENT'] == 0]
+            y2 = dataset.age[dataset['DEATH_EVENT'] == 1]
         elif sel2 == 'creatinine_phosphokinase':
-            y1 = dataset.creatinine_phosphokinase[dataset['DEATH_EVENT'] == 0];
-            y2 = dataset.creatinine_phosphokinase[dataset['DEATH_EVENT'] == 1];
+            y1 = dataset.creatinine_phosphokinase[dataset['DEATH_EVENT'] == 0]
+            y2 = dataset.creatinine_phosphokinase[dataset['DEATH_EVENT'] == 1]
         elif sel2 == 'ejection_fraction':
-            y1 = dataset.ejection_fraction[dataset['DEATH_EVENT'] == 0];
-            y2 = dataset.ejection_fraction[dataset['DEATH_EVENT'] == 1];
+            y1 = dataset.ejection_fraction[dataset['DEATH_EVENT'] == 0]
+            y2 = dataset.ejection_fraction[dataset['DEATH_EVENT'] == 1]
         elif sel2 == 'platelets':
-            y1 = dataset.platelets[dataset['DEATH_EVENT'] == 0];
-            y2 = dataset.platelets[dataset['DEATH_EVENT'] == 1];
+            y1 = dataset.platelets[dataset['DEATH_EVENT'] == 0]
+            y2 = dataset.platelets[dataset['DEATH_EVENT'] == 1]
         elif sel2 == 'serum_sodium':
-            y1 = dataset.serum_sodium[dataset['DEATH_EVENT'] == 0];
-            y2 = dataset.serum_sodium[dataset['DEATH_EVENT'] == 1];
+            y1 = dataset.serum_sodium[dataset['DEATH_EVENT'] == 0]
+            y2 = dataset.serum_sodium[dataset['DEATH_EVENT'] == 1]
 
         pyplot.scatter(x1, y1, c="darkorange")
         pyplot.scatter(x2, y2, c="dimgray")
@@ -138,24 +134,24 @@ def data_analysis(dataset):
 
     else:
         if sel == 'age':
-            x = dataset.age;
+            x = dataset.age
         elif sel == 'creatinine_phosphokinase':
-            x = dataset.creatinine_phosphokinase;
+            x = dataset.creatinine_phosphokinase
         elif sel == 'ejection_fraction':
-            x = dataset.ejection_fraction;
+            x = dataset.ejection_fraction
         elif sel == 'platelets':
-            x = dataset.platelets;
+            x = dataset.platelets
         elif sel == 'serum_sodium':
-            x = dataset.serum_sodium;
+            x = dataset.serum_sodium
 
         if sel2 == 'age':
-            y = dataset.age;
+            y = dataset.age
         elif sel2 == 'creatinine_phosphokinase':
-            y = dataset.creatinine_phosphokinase;
+            y = dataset.creatinine_phosphokinase
         elif sel2 == 'ejection_fraction':
-            y = dataset.ejection_fraction;
+            y = dataset.ejection_fraction
         elif sel2 == 'platelets':
-            y = dataset.platelets;
+            y = dataset.platelets
         elif sel2 == 'serum_sodium':
             y = dataset.serum_sodium;
 
@@ -163,7 +159,6 @@ def data_analysis(dataset):
         pyplot.xlabel(sel, size=50)
         pyplot.ylabel(sel2, size=50)
         st.pyplot(fig)
-
 
     # col1, col2 = st.columns(2)
     # # SEX PLOT
@@ -200,15 +195,15 @@ def data_analysis(dataset):
     st.header('COUNT PLOT')
 
     sel3 = st.selectbox('Select Attribute',
-                       ('anaemia', 'diabetes', 'high_blood_pressure', 'smoking'))
+                        ('anaemia', 'diabetes', 'high_blood_pressure', 'smoking'))
 
     death2 = st.checkbox('Show death?', key=2)
 
     if death2:
         fig = sns.catplot(x=sel3, hue="DEATH_EVENT", kind="count", data=dataset)
 
-        pyplot.title('Death Incidents from '+sel3, size=25)
-        pyplot.xticks((0, 1), ["No "+sel3, sel3])
+        pyplot.title('Death Incidents from ' + sel3, size=25)
+        pyplot.xticks((0, 1), ["No " + sel3, sel3])
         pyplot.xlabel(sel3, size=20)
         pyplot.ylabel('People', size=20)
         st.pyplot(fig)
@@ -218,9 +213,6 @@ def data_analysis(dataset):
         pyplot.xlabel(sel3, size=20)
         pyplot.ylabel('People', size=20)
         st.pyplot(fig)
-
-
-
 
 
 def machine_learning(dataset, model, testPercentage):
@@ -255,9 +247,6 @@ def machine_learning(dataset, model, testPercentage):
         code = '''mlModel.predict_proba(myDataFrame)'''
         st.code(code, language='python')
 
-    with st.expander("Machine Learning Models"):
-        pass
-
     # Clean
     dataset['age'] = dataset['age'].astype(numpy.int64)
     dataset['platelets'] = dataset['platelets'].astype(numpy.int64)
@@ -277,7 +266,7 @@ def machine_learning(dataset, model, testPercentage):
     elif model == 'K-Nearest Neighbors':
         mlModel = KNeighborsClassifier()
     elif model == 'Support Vector Machine':
-        mlModel = SVC(random_state=42,probability=True)
+        mlModel = SVC(random_state=42, probability=True)
     mlModel.fit(X_train, Y_train)
     pred = mlModel.predict(X_train)
 
@@ -337,13 +326,8 @@ def machine_learning(dataset, model, testPercentage):
                      serumSodium,
                      sex, smoking], ]
             myPredictionData = pd.DataFrame(data)
-            st.write(myPredictionData)
-            # TODO Fix warning here
-            print(data)
-            st.write(mlModel.predict(data))
-            st.write(mlModel.predict_proba(data))
-            print(mlModel.predict(data))
-            print(mlModel.predict_proba(data))
+            output = "The chance of the individual having a heart attack is : " + str(round(float(mlModel.predict_proba(myPredictionData)[0][1]),2)*100)+"%"
+            st.write(output)
 
 
 def main():
