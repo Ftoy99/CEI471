@@ -19,21 +19,29 @@ from sklearn.neighbors import KNeighborsClassifier
 # Project Introduction before user uplaod file
 def introduction():
     with st.container():
-        col1, col2, col3 = st.columns([5, 6, 5])
+        col1, col2, col3 = st.columns([4, 6, 1])
 
         with col1:
             st.write("")
-
         with col2:
+            st.image("logo.png", width=250)
 
-            st.image("logo.png", width=200)
-            st.header("CEI471")
         with col3:
             st.write("")
-
+        st.header("CEI471")
         st.header("Heart Attack Prediction With Machine Learning")
-        st.write("To Continue upload dataset.")
-        st.write("inside")
+        st.write("Task: Using the available historical data follow the necessary steps and develop a "
+                 "model that will predict the chance of a heart attack using the person medical condition")
+        # Ζητούμενο:	Χρησιμοποιώντας τα διαθέσιμα ιστορικά δεδομένα να ακολουθηθούν τα αναγκαία βήματα κ
+        # αι αναπτυχθεί ένα μοντέλο όπου θα μπορεί να προβλέψει το κίνδυνο καρδιακής
+        # προσβολής με βάση την κλινική του εικόνα.
+        st.markdown("***")
+        st.markdown("""<p style='display: block; text-align: center;'>Christos Christodoulou 14890</p>""", unsafe_allow_html=True)
+        st.markdown("""<p style='display: block; text-align: center;'>Danny Kahtan 18494</p>""", unsafe_allow_html=True)
+        st.markdown("""<p style='display: block; text-align: center;'>Dimitris Ioannou 14423</p>""", unsafe_allow_html=True)
+        st.markdown("***")
+        st.write("To continue upload a dataset from the sidebar.")
+
 
 
 def wrong_dataset(dataset, to_check):
@@ -41,9 +49,7 @@ def wrong_dataset(dataset, to_check):
     st.write("The dataset you uploaded is not correct or its missing collumns")
     st.write("Dataset uploaded is missing columns:")
     for x in set(to_check).difference(dataset.columns):
-        st.write("        ⨷"+x)
-
-
+        st.write("        ⨷" + x)
 
 
 def clean_dataset(dataset):
@@ -375,6 +381,7 @@ def machine_learning(dataset, model, testPercentage):
     # sc = StandardScaler()
     # X_train = sc.fit_transform(X_train)
     # X_test = sc.transform(X_test)
+
     # Models go here
     if model == 'Logistic Regression':
         mlModel = LogisticRegression(random_state=0)
