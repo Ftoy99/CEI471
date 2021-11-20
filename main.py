@@ -73,6 +73,14 @@ def data_analysis(dataset):
     st.pyplot(fig)
 
 
+    #CORRELATION WITH TARGET
+    corr_matrix = dataset.corr()
+    fig, ax = pyplot.subplots()
+    ax = dataset.drop('DEATH_EVENT', axis=1).corrwith(dataset.DEATH_EVENT).plot(kind='bar', grid=True, figsize=(12, 8),
+                                                       title="Correlation with target")
+
+    bottom, top = ax.get_ylim()
+    st.pyplot(fig)
 
 
     # #PairPlot
@@ -131,8 +139,8 @@ def data_analysis(dataset):
 
         pyplot.scatter(x1, y1, c="darkorange")
         pyplot.scatter(x2, y2, c="dimgray")
-        pyplot.xlabel(sel, size=40)
-        pyplot.ylabel(sel2, size=40)
+        pyplot.xlabel(sel, size=20)
+        pyplot.ylabel(sel2, size=20)
         pyplot.legend(["No Death", "Death"])
         st.pyplot(fig)
 
@@ -160,8 +168,8 @@ def data_analysis(dataset):
             y = dataset.serum_sodium;
 
         pyplot.scatter(x, y, c="darkorange")
-        pyplot.xlabel(sel, size=50)
-        pyplot.ylabel(sel2, size=50)
+        pyplot.xlabel(sel, size=20)
+        pyplot.ylabel(sel2, size=20)
         st.pyplot(fig)
 
 
