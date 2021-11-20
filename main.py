@@ -16,9 +16,34 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 
 
-def pred_heart_attack(data, model):
-    print(model.predict(data))
-    print(model.predict_proba(data))
+# Project Introduction before user uplaod file
+def introduction():
+    with st.container():
+        col1, col2, col3 = st.columns([5, 6, 5])
+
+        with col1:
+            st.write("")
+
+        with col2:
+
+            st.image("logo.png", width=200)
+            st.header("CEI471")
+        with col3:
+            st.write("")
+
+        st.header("Heart Attack Prediction With Machine Learning")
+        st.write("To Continue upload dataset.")
+        st.write("inside")
+
+
+def wrong_dataset(dataset, to_check):
+    st.header("Dataset not correct.")
+    st.write("The dataset you uploaded is not correct or its missing collumns")
+    st.write("Dataset uploaded is missing columns:")
+    for x in set(to_check).difference(dataset.columns):
+        st.write("        ⨷"+x)
+
+
 
 
 def clean_dataset(dataset):
@@ -44,8 +69,6 @@ def clean_dataset(dataset):
     st.write(dataset)
     st.write("Our dataset looks clean enough so that it can be processed.")
     return dataset
-
-
 
 
 def data_analysis(dataset):
@@ -75,9 +98,6 @@ def data_analysis(dataset):
                   '''
         st.code(code, language='python')
 
-
-
-
     # Corellation Matrix
     corr_matrix = dataset.corr()
     fig, ax = pyplot.subplots()
@@ -89,10 +109,6 @@ def data_analysis(dataset):
 
     bottom, top = ax.get_ylim()
     st.pyplot(fig)
-
-
-
-
 
     # #PairPlot
     # subData = dataset[['age', 'creatinine_phosphokinase', 'ejection_fraction', 'platelets', 'serum_sodium']]
@@ -425,25 +441,13 @@ def machine_learning(dataset, model, testPercentage):
                      serumSodium,
                      sex, smoking], ]
             myPredictionData = pd.DataFrame(data)
-            output = "The chance of the individual having a heart attack is : " + str(int(round(float(mlModel.predict_proba(myPredictionData)[0][1]),2)*100)+"%")
+            output = "The chance of the individual having a heart attack is : " + str(
+                int(round(float(mlModel.predict_proba(myPredictionData)[0][1] * 100), 0))) + "%"
             st.write(output)
 
 
 def main():
     # initializing streamlit
-
-
-    col1, col2, col3 = st.columns([5, 6, 5])
-
-    with col1:
-        st.write("")
-
-    with col2:
-        st.sidebar.image("logo.png", width=200)
-
-    with col3:
-        st.write("")
-
 
     st.sidebar.title("CEI 471 Semester Project")
     st.sidebar.write('Heart Attack Prediction With Machine Learning')
@@ -456,18 +460,26 @@ def main():
     dataset = st.sidebar.file_uploader(label="Load your dataset.", type=["csv"])
     # Form for Machine Learning
     if dataset is not None:
+        to_check = ['age', 'anaemia', 'creatinine_phosphokinase', 'diabetes', 'ejection_fraction',
+                    'high_blood_pressure', 'platelets', 'serum_creatinine', 'serum_sodium', 'sex', 'smoking', 'time',
+                    'DEATH_EVENT']
         dataset = pd.read_csv(dataset)
-        op = st.sidebar.selectbox('Select View',
-                                  ('Data Cleaning', 'Data Analysis', 'Machine Learning'))
-        if op == 'Data Cleaning':
-            clean_dataset(dataset)
-        elif op == 'Data Analysis':
-            data_analysis(dataset)
-        elif op == 'Machine Learning':
-            model = st.sidebar.selectbox('Chose Machine Learning Algorithm',
-                                         ('Logistic Regression', 'K-Nearest Neighbors', 'Support Vector Machine'))
-            testPercentage = st.sidebar.slider('Datasize percentage for testing.', 10, 90, 20)
-            machine_learning(dataset, model, testPercentage)
+        if not set(to_check).issubset(set(dataset.columns)):
+            wrong_dataset(dataset, to_check)
+        else:
+            op = st.sidebar.selectbox('Select View',
+                                      ('Data Cleaning', 'Data Analysis', 'Machine Learning'))
+            if op == 'Data Cleaning':
+                clean_dataset(dataset)
+            elif op == 'Data Analysis':
+                data_analysis(dataset)
+            elif op == 'Machine Learning':
+                model = st.sidebar.selectbox('Chose Machine Learning Algorithm',
+                                             ('Logistic Regression', 'K-Nearest Neighbors', 'Support Vector Machine'))
+                testPercentage = st.sidebar.slider('Datasize percentage for testing.', 10, 90, 20)
+                machine_learning(dataset, model, testPercentage)
+    else:
+        introduction()
 
 
 if __name__ == "__main__":
