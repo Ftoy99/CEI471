@@ -431,6 +431,20 @@ def machine_learning(dataset, model, testPercentage):
 
 def main():
     # initializing streamlit
+
+
+    col1, col2, col3 = st.columns([5, 6, 5])
+
+    with col1:
+        st.write("")
+
+    with col2:
+        st.sidebar.image("logo.png", width=200)
+
+    with col3:
+        st.write("")
+
+
     st.sidebar.title("CEI 471 Semester Project")
     st.sidebar.write('Heart Attack Prediction With Machine Learning')
     st.sidebar.header("Group 2")
