@@ -156,8 +156,8 @@ def data_analysis(dataset):
             y = dataset.serum_sodium;
 
         pyplot.scatter(x, y, c="darkorange")
-        pyplot.xlabel(sel, size=50)
-        pyplot.ylabel(sel2, size=50)
+        pyplot.xlabel(sel, size=25)
+        pyplot.ylabel(sel2, size=25)
         st.pyplot(fig)
 
     # col1, col2 = st.columns(2)
