@@ -46,6 +46,8 @@ def clean_dataset(dataset):
     return dataset
 
 
+
+
 def data_analysis(dataset):
     # Clean dataset
     dataset['age'] = dataset['age'].astype(numpy.int64)
@@ -53,12 +55,28 @@ def data_analysis(dataset):
     dataset['serum_creatinine'] = dataset['serum_creatinine'].map('{:,.2f}'.format)
     del (dataset["time"])
     st.header('Data Analysis and Statistics')
+
     with st.expander("Correlation Matrix"):
         st.write("""
            Correlation Matrix- let’s you see correlations between all variables.
 
     Within seconds, you can see whether something is positively or negatively correlated with our predictor (Death event).
+    
         """)
+
+        code = '''# Corellation Matrix
+    corr_matrix = dataset.corr()
+    fig, ax = pyplot.subplots()
+    ax = sns.heatmap(corr_matrix,
+                     annot=True,
+                     linewidths=0.5,
+                     fmt=".2f",
+                     cmap="YlGnBu")
+                  '''
+        st.code(code, language='python')
+
+
+
 
     # Corellation Matrix
     corr_matrix = dataset.corr()
@@ -72,6 +90,10 @@ def data_analysis(dataset):
     bottom, top = ax.get_ylim()
     st.pyplot(fig)
 
+
+
+
+
     # #PairPlot
     # subData = dataset[['age', 'creatinine_phosphokinase', 'ejection_fraction', 'platelets', 'serum_sodium']]
     # pyplot.margins(0)
@@ -80,6 +102,48 @@ def data_analysis(dataset):
 
     # COMPARISON PAIRPLOT
     st.header('COMPARISON PLOT')
+
+    with st.expander("Comparison Plot Code"):
+        st.write("""
+             
+
+           """)
+
+        code = '''
+        #SET AND DISPLAY FILTERING FOR EACH AXIS AND DEATH CHECKBOX
+    sel = st.selectbox('Select Attribute for X Axis',
+                       ('age', 'creatinine_phosphokinase', 'ejection_fraction', 'platelets', 'serum_sodium'))
+
+    sel2 = st.selectbox('Select Attribute for Y Axis',
+                        ('age', 'creatinine_phosphokinase', 'ejection_fraction', 'platelets', 'serum_sodium'))
+
+    death = st.checkbox('Show death?', key=1)
+    
+    #IF DEATH IS CHECKED SET AND DISPLAY TARGET ON THE PLOT
+    
+        if death:
+
+        if sel == 'age':
+            x1 = dataset.age[dataset['DEATH_EVENT'] == 0]
+            x2 = dataset.age[dataset['DEATH_EVENT'] == 1]
+        elif sel == 'creatinine_phosphokinase':
+            x1 = dataset.creatinine_phosphokinase[dataset['DEATH_EVENT'] == 0]
+            x2 = dataset.creatinine_phosphokinase[dataset['DEATH_EVENT'] == 1]
+            
+            ... #for each data element
+    
+    
+    #SET THE PLOT
+    
+    pyplot.scatter(x1, y1, c="darkorange")
+        pyplot.scatter(x2, y2, c="dimgray")
+        pyplot.xlabel(sel, size=40)
+        pyplot.ylabel(sel2, size=40)
+        pyplot.legend(["No Death", "Death"])
+        st.pyplot(fig)
+
+                     '''
+        st.code(code, language='python')
 
     fig, ax = pyplot.subplots()
 
@@ -193,6 +257,41 @@ def data_analysis(dataset):
     #     st.pyplot(fig)
 
     st.header('COUNT PLOT')
+
+    with st.expander("Count Plot Code"):
+        st.write("""
+
+
+           """)
+
+        code = '''
+        
+         #SET AND DISPLAY FILTERING FOR EACH AXIS AND DEATH CHECKBOX
+         
+        sel3 = st.selectbox('Select Attribute',
+                        ('anaemia', 'diabetes', 'high_blood_pressure', 'smoking'))
+
+    death2 = st.checkbox('Show death?', key=2)
+    
+          #IF DEATH IS CHECKED SET AND DISPLAY TARGET ON THE PLOT
+
+    if death2:
+        fig = sns.catplot(x=sel3, hue="DEATH_EVENT", kind="count", data=dataset)
+
+        pyplot.title('Death Incidents from ' + sel3, size=25)
+        pyplot.xticks((0, 1), ["No " + sel3, sel3])
+        pyplot.xlabel(sel3, size=20)
+        pyplot.ylabel('People', size=20)
+        st.pyplot(fig)
+    else:
+        fig = sns.catplot(x=sel3, kind="count", data=dataset)
+        pyplot.xticks((0, 1), ["No " + sel3, sel3])
+        pyplot.xlabel(sel3, size=20)
+        pyplot.ylabel('People', size=20)
+        st.pyplot(fig)
+
+                     '''
+        st.code(code, language='python')
 
     sel3 = st.selectbox('Select Attribute',
                         ('anaemia', 'diabetes', 'high_blood_pressure', 'smoking'))
