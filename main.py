@@ -424,7 +424,8 @@ def machine_learning(dataset, model, testPercentage):
             data = [[int(age), anemia, creatine, diabetes, ejectionFraction, highBP, platelets, serumCreatinine,
                      serumSodium,
                      sex, smoking], ]
-            myPredictionData = pd.DataFrame(dat            output = "The chance of the individual having a heart attack is : " + str(int(round(float(mlModel.predict_proba(myPredictionData)[0][1]*100),0)))+"%"
+            myPredictionData = pd.DataFrame(data)
+            output = "The chance of the individual having a heart attack is : " + str(int(round(float(mlModel.predict_proba(myPredictionData)[0][1]*100),0)))+"%"
             st.write(output)
 
 
